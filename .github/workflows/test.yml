@@ -1,0 +1,30 @@
+name: Deploy to upper environment
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name:  Checkout Code
+        uses:  actions/checkout@v4
+        
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version:  18
+          cache:  npm
+
+      - name: Install Dependency
+        run:  npm install
+        
+        # so many steps can be added.....
+        
+      - name:  Build Project
+        run:  npm run build      
+
+      - name: Deploy to vercel
+        run:  npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+    
